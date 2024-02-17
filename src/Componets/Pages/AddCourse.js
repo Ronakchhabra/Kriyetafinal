@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 function AddCourse() {
-  const [loading,setloading]  = useState(false);
+  const [loading, setloading] = useState(false);
   let userID = localStorage.getItem('userID')
   const [User, SetUser] = useState({
     title: "",
@@ -39,9 +39,9 @@ function AddCourse() {
       formData.append("imageLink", User.imageLink);
     }
     formData.append("userID", User.userID);
-    try{
-    let res = await axios.post("https://hackathondb.cyclic.app/auth/addcourse", formData)
-      if(res){
+    try {
+      let res = await axios.post("https://hackathondb.cyclic.app/auth/addcourse", formData)
+      if (res) {
         setloading(false);
         toast.success(res.data.message);
         console.log(res.data);
@@ -58,116 +58,108 @@ function AddCourse() {
           });
         }
         navigate("/courses");
-        }
-      }catch(err){
-        console.log(err);
-        setloading(false);
       }
-    };
+    } catch (err) {
+      console.log(err);
+      setloading(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
-      {loading ? <div className="spinner"></div>:
-      <form
-        className="form-horizontal container justify-center border-spacing-2 border"
-        style={{ marginTop: 100, marginLeft: 20 }}
-        encType="multipart/form-data"
-      >
-        
-        <div className="form-group ">
-          <label className="control-label col-sm-2 " htmlFor="title">
-            Course Title:
-          </label>
-          <br />
-          <div className="col-sm-10">
-            <TextField
-              sx={{ width: "40%" }}
-              type="text"
-              className="form-control"
-              id="title"
-              name="title"
-              autoComplete="off"
-              onChange={(e) => handleChange(e)}
-              placeholder="Enter Course Title"
-            />
-          </div>
-        </div>
-        <br />
+      {loading ? <div className="spinner"></div> :
+        <div className="flex justify-center">
+          <form
+            className="w-full md:w-1/2 border p-4"
+            style={{ marginTop: 100 }}
+            encType="multipart/form-data"
+          >
+            <div className="form-group ">
+              <label className="control-label" htmlFor="title">
+                Course Title:
+              </label>
+              <br />
+              <TextField
+                sx={{ width: "100%" }}
+                type="text"
+                className="form-control"
+                id="title"
+                name="title"
+                autoComplete="off"
+                onChange={(e) => handleChange(e)}
+                placeholder="Enter Course Title"
+              />
+            </div>
+            <br />
 
-        <div className="form-group">
-          <label className="control-label col-sm-2" htmlFor="CourseDesc">
-            Course Description:
-          </label>
-          <br />
-          <div className="col-sm-10">
-            <TextField
-              sx={{ width: "40%" }}
-              type="text"
-              className="form-control"
-              id="CourseDesc"
-              autoComplete="off"
-              name="description"
-              onChange={(e) => handleChange(e)}
-              placeholder="Enter Course Description"
-            />
-          </div>
-        </div>
-        <br />
+            <div className="form-group">
+              <label className="control-label" htmlFor="CourseDesc">
+                Course Description:
+              </label>
+              <br />
+              <TextField
+                sx={{ width: "100%" }}
+                type="text"
+                className="form-control"
+                id="CourseDesc"
+                autoComplete="off"
+                name="description"
+                onChange={(e) => handleChange(e)}
+                placeholder="Enter Course Description"
+              />
+            </div>
+            <br />
 
-        <div className="form-group">
-          <label className="control-label col-sm-2" htmlFor="lvlOfDiff">
-            Course level Of Diffi:
-          </label>
-          <br />
-          <div className="col-sm-10">
-            <TextField
-              sx={{ width: "40%" }}
-              type="text"
-              className="form-control"
-              id="lvlOfDiff"
-              autoComplete="off"
-              name="lvlOfDiff"
-              onChange={(e) => handleChange(e)}
-              placeholder="Enter Course lvlOfDiff"
-            />
-          </div>
-        </div>
-        <br />
+            <div className="form-group">
+              <label className="control-label" htmlFor="lvlOfDiff">
+                Course level Of Diffi:
+              </label>
+              <br />
+              <TextField
+                sx={{ width: "100%" }}
+                type="text"
+                className="form-control"
+                id="lvlOfDiff"
+                autoComplete="off"
+                name="lvlOfDiff"
+                onChange={(e) => handleChange(e)}
+                placeholder="Enter Course lvlOfDiff"
+              />
+            </div>
+            <br />
 
-        <div className="form-group">
-          <label className="control-label col-sm-2" htmlFor="imageLink">
-            Course Image:
-          </label>
-          <br />
-          <div className="col-sm-10">
-            <TextField
-              sx={{ width: "40%" }}
-              type="file"
-              accept="image/*"
-              name="imageLink"
-              className="form-control"
-              id="imageLink"
-              onChange={handleFileChange}
-            />
-          </div>
-        </div>
-        <br />
+            <div className="form-group">
+              <label className="control-label" htmlFor="imageLink">
+                Course Image:
+              </label>
+              <br />
+              <TextField
+                sx={{ width: "100%" }}
+                type="file"
+                accept="image/*"
+                name="imageLink"
+                className="form-control"
+                id="imageLink"
+                onChange={handleFileChange}
+              />
+            </div>
+            <br />
 
-        <div className="form-group">
-          <div className="col-sm-offset-2 col-sm-10">
-            <Button
-              type="button"
-              variant="contained"
-              className="btn btn-default"
-              onClick={handleClick}
-            >
-              Add Course
-            </Button>
-          </div>
+            <div className="form-group">
+              <Button
+                type="button"
+                variant="contained"
+                className="btn btn-default"
+                onClick={handleClick}
+              >
+                Add Course
+              </Button>
+            </div>
+          </form>
         </div>
-      </form>
       }
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 }

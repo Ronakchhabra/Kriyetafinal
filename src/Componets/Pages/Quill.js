@@ -58,6 +58,7 @@ export default function Quill() {
   const navigate = useNavigate();
   let UserID = localStorage.getItem('CourseUserID')
   let CourseID = localStorage.getItem('CourseID')
+  let ContentID = localStorage.getItem('ContentID')
   const handleClick = async () => {
     setisLoading(true)
     const html = quillRef.current.editor.root.innerHTML;
@@ -66,7 +67,7 @@ export default function Quill() {
       CourseID,
       subTitle: Title,
       subContent: html,
-      ContentID: Date.now(),
+      ContentID: ContentID ? ContentID : Date.now(),
     };
     try {
       let res = await axios.post('https://hackathondb.cyclic.app/auth/addDoc', data);

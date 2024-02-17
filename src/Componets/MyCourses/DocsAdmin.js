@@ -26,10 +26,14 @@ import {
     Paper,
     InputAdornment,
     TextField,
+    useTheme,
 } from "@mui/material";
 
+import Collapse from "@mui/material/Collapse";
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import Mail from "@mui/icons-material/Mail";
 import { AddTask, Check, Clear, Search } from "@mui/icons-material";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -68,6 +72,22 @@ export default function DocsAdmin() {
             console.log(err)
         }
     }
+    const theme = useTheme();
+    const [open, setOpen] = React.useState(true);
+    const [isCollapse, setIsCollapse] = React.useState(false);
+  
+    const handleDrawerOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleDrawerClose = () => {
+      setOpen(false);
+    };
+  
+    const handleCollapse = () => {
+      setIsCollapse(!isCollapse);
+    };
+           
 
     return (
         <>
@@ -102,16 +122,100 @@ export default function DocsAdmin() {
                                 </ListItemButton>
                             </ListItem>
                         </List>
+                        
                         <List>
-                            <ListItem disablePadding>
-                                <ListItemButton onClick={() => navigate('/mycourse/docsadmin')}>
-                                    <ListItemIcon>
-                                        <AccountBalance />
-                                    </ListItemIcon>
-                                    <ListItemText primary={"MyCourse"} />
-                                </ListItemButton>
-                            </ListItem>
-                        </List>
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={handleCollapse}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <Mail />
+              </ListItemIcon>
+              <ListItemText primary="My Course" sx={{ opacity: open ? 1 : 0 }} />
+              {isCollapse ? <ExpandLessIcon /> : <ExpandMoreIcon/>}
+            </ListItemButton>
+          </ListItem>
+          <Collapse in={isCollapse} timeout="auto" unmountOnExit>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                  onClick={()=>navigate('/mycourse/docsadmin')}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Mail/>
+                  </ListItemIcon>
+                  <ListItemText primary={'Documentation'} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                  onClick={()=>navigate('/mycourse/videoadmin')}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Mail/>
+                  </ListItemIcon>
+                  <ListItemText primary={'Video'} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                  onClick={()=>navigate('/mycourse/notesadmin')}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Mail/>
+                  </ListItemIcon>
+                  <ListItemText primary={'Notes'} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+
+          </Collapse>
+        </List>
                         <Divider />
                         <List>
                             <ListItem disablePadding>
@@ -137,12 +241,7 @@ export default function DocsAdmin() {
                 }}
             >
                 <Toolbar />
-                <Typography
-                    variant="h4"
-                    sx={{ fontSize: "20px", color: "#6945FF", textAlign: "center" }}
-                >
-                    Documentation Monitoring
-                </Typography>
+
                 <TableContainer component={Paper} sx={{ marginTop: "20px" }}>
                     <Table sx={{ minWidth: 650 }} aria-label="caption table">
                         {/* // first Row */}

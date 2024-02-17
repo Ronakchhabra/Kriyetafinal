@@ -12,15 +12,19 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Navbar from "../Navbar/Navbar";
-import { AccountBalance, AddBox, ExpandLess, ExpandMore, HomeOutlined, PeopleOutlined } from "@mui/icons-material";
+import { AccountBalance, AddBox, ExpandLess, ExpandMore, HomeOutlined, Inbox, Mail, PeopleOutlined } from "@mui/icons-material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, Collapse, Grid, InputLabel,MenuItem, Select } from "@mui/material";
+import { Button, CardActionArea, Collapse, Grid, InputLabel,MenuItem, Select, useTheme } from "@mui/material";
 import NotFound from "./NotFound";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+// import Collapse from "@mui/material/Collapse";
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 
 const drawerWidth = 240;
 export default function Courses() {
@@ -46,6 +50,23 @@ export default function Courses() {
   const handleCommunityClick = () => {
     setIsCommunityOpen(!isCommunityOpen); // Toggle open/close state
   };
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(true);
+  const [isCollapse, setIsCollapse] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const handleCollapse = () => {
+    setIsCollapse(!isCollapse);
+  };
+         
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -81,6 +102,102 @@ export default function Courses() {
               </ListItem>
             </List>
             <Divider />
+
+
+
+ <List>
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={handleCollapse}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <Mail />
+              </ListItemIcon>
+              <ListItemText primary="My Course" sx={{ opacity: open ? 1 : 0 }} />
+              {isCollapse ? <ExpandLessIcon /> : <ExpandMoreIcon/>}
+            </ListItemButton>
+          </ListItem>
+          <Collapse in={isCollapse} timeout="auto" unmountOnExit>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                  onClick={()=>navigate('/mycourse/docsadmin')}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Mail/>
+                  </ListItemIcon>
+                  <ListItemText primary={'Documentation'} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                  onClick={()=>navigate('/mycourse/videoadmin')}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Mail/>
+                  </ListItemIcon>
+                  <ListItemText primary={'Video'} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                  onClick={()=>navigate('/mycourse/notesadmin')}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Mail/>
+                  </ListItemIcon>
+                  <ListItemText primary={'Notes'} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+
+          </Collapse>
+        </List>
             <List>
               <ListItem disablePadding>
                 <ListItem button onClick={() => navigate('/community')}>

@@ -107,7 +107,7 @@ const SignUpForm = () => {
           onChange={handleChange}
           required
         />
-        <button type="button" className="Login-btn" onClick={handleClick}>
+        <button type="button" className="Login-btn bg-color-purple-700" onClick={handleClick}>
           Sign Up
         </button>
         </>
