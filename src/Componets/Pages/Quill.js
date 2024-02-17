@@ -56,27 +56,27 @@ export default function Quill({selectedCourse}) {
   const [Title, setTitle] = useState("");
   const quillRef = useRef(null);
   const navigate = useNavigate();
+  let UserID = localStorage.getItem('userID')
   const handleClick = async() => {
     setisLoading(true)
     const html = quillRef.current.editor.root.innerHTML;
     const data = {
+      UserID,
       CourseID: selectedCourse._id,
       subTitle: Title,
       subContent: html,
       ContentID: Date.now(),
     };
     try{
-     let res  =await axios.post('http://localhost:3001/auth/addDoc',data);
+     let res = await axios.post('https://hackathondb.cyclic.app/auth/addDoc',data);
      if(res.data){
        setisLoading(false)
       console.log(res.data);
-      navigate('/courses');
-     }
+      navigate('/coursedetalis/'+selectedCourse._id);
+    }
     }catch(err){
       console.log(err);
-      
     }
-    console.log(data);
   };
 
   return (

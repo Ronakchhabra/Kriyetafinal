@@ -9,26 +9,32 @@ import {
 } from "@mui/material";
 import AddBox from "@mui/icons-material/AddBox";
 import Sidebar from "../Sidebar/Sidebar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-function Documentation({setselectedDocs}) {
+function Documentation({ setselectedDocs }) {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [isloading, setisloading] = useState(true);
-  React.useEffect(() => {
-    const getData = async() => {
-      try{
-        let res = await axios
-          .get("http://localhost:3001/auth/getDoc")
-          if(res.data) {setCourses(res.data);setisloading(false);}
-      }
-      catch(err){
+  const { id } = useParams();
+  const getData = async () => {
+    try {
+      let res = await axios
+        .get("https://hackathondb.cyclic.app/auth/getDoc/" + id)
+      if (res.data) { setCourses(res.data); console.log(res.data); setisloading(false); }
+      if (res.data === "") {
         setisloading(false);
       }
     }
+    catch (err) {
+      setisloading(false);
+    }
+  }
+
+  React.useEffect(() => {
     getData();
   }, []);
+
   return (
     <>
       <Sidebar />
@@ -41,35 +47,51 @@ function Documentation({setselectedDocs}) {
             mr: 2,
           }}
         >
-          <Button startIcon={<AddBox />} variant="contained" onClick={()=>navigate('/editor')}>
+          <Button startIcon={<AddBox />} variant="contained" onClick={() => navigate('/editor')}>
             Add Documentation
           </Button>
         </Box>
         <div>
-          {isloading ? 
-          <div className="spinner" /> : 
-          courses?.map((item)=>{
-            return(
-              <>
-          <Card sx={{ maxWidth: "full", height: 50, mt: 2 }} key={item._id}>
-            <CardActionArea>
-              <CardContent onClick={()=>{setselectedDocs(item);navigate('/DocumentationContent')}}>
-                <Typography
-                  gutterBottom
-                  variant="h6"
-                  component="div"
-                  sx={{ textAlign: "center" }}
-                >
-                  {item.subTitle}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
+          {isloading ?
+            <div className="spinner" /> :
+            courses?.length === 0 ? 
+            <Card sx={{ maxWidth: "full", height: 50, mt: 2 }} >
+              <CardActionArea>
+                <CardContent>
+                  <Typography
+                    gutterBottom
+                    variant="h6"
+                    component="div"
+                    sx={{ textAlign: "center" }}
+                  >
+                    {"No Documentation Added Yet"}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+              : courses?.map((item) => {
+                return (
+                  <div key={item._id}>
+                    <Card sx={{ maxWidth: "full", height: 50, mt: 2 }}>
+                      <CardActionArea>
+                        <CardContent onClick={() => { setselectedDocs(item); navigate('/DocumentationContent') }}>
+                          <Typography
+                            gutterBottom
+                            variant="h6"
+                            component="div"
+                            sx={{ textAlign: "center" }}
+                          >
+                            {item.subTitle}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
                     <div style={{ display: "flex", justifyContent: "center" }}>
-                    <AddBox />
+                      <AddBox />
+                    </div>
                   </div>
-                  </>
-          )})
+                )
+              })
           }
 
         </div>

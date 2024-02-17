@@ -13,7 +13,8 @@ import Notes from './Componets/Pages/Notes';
 import ChatSidebar from './Componets/Pages/ChatSidebar';
 import Quill from './Componets/Pages/Quill';
 import DocumentationContent from './Componets/Pages/DocumentationContent';
-
+import HomePage from './Componets/Pages/HomePage';
+import DocsAdmin from './Componets/MyCourses/DocsAdmin';
 function App() {
   const [selectedCourse,setselectedCourse] = useState([]);
   const [selectedDocs,setselectedDocs] = useState([]);
@@ -22,7 +23,7 @@ function App() {
         <Routes>
           <Route>
             <Route
-              path="/"
+              path="/Auth"
               element={<Auth />}
             />
             <Route
@@ -30,12 +31,12 @@ function App() {
               element={<Courses setselectedCourse={setselectedCourse}/>}
             />
             <Route
-              path="/coursedetalis"
+              path="/coursedetalis/:id"
               element={<Documentation selectedCourse={selectedCourse} setselectedDocs={setselectedDocs}/>}
             />                                   
             <Route
               path="/coursevideo"
-              element={<Video />}
+              element={<Video selectedCourse={selectedCourse}/>}
             />
             <Route
               path="/editor"
@@ -43,11 +44,11 @@ function App() {
             />
             <Route
               path="/project"
-              element={<Project />}
+              element={<Project selectedCourse={selectedCourse}/>}
             />    
             <Route
               path="/notes"
-              element={<Notes />}
+              element={<Notes selectedCourse={selectedCourse}/>}
             />                       
             <Route
               path="/addcourse"
@@ -60,10 +61,18 @@ function App() {
             <Route
               path="/DocumentationContent"
               element={<DocumentationContent selectedDocs={selectedDocs}/>}
-            />            
+            />                
+            <Route
+            path="/mycourse/docsadmin"
+            element={<DocsAdmin/>}
+          />            
             <Route
               path="/*"
               element={<NotFound />}
+            />
+            <Route
+              path="/"
+              element={<HomePage />}
             />
           </Route>
         </Routes>

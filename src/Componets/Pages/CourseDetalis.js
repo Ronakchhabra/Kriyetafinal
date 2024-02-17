@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Box, Button, CardActionArea, Toolbar } from "@mui/material";
 import Sidebar from '../Sidebar/Sidebar';
 import axios from "axios";
+import { useParams } from "react-router-dom";
 export default function CourseDetalis() {
   const [topics, setTopic] = useState([]);
   return (
@@ -24,17 +25,7 @@ export default function CourseDetalis() {
       </Card>
       <Box display={'flex'} sx={{justifyContent:'center',mr:50,mt:2}}>
       <Button  variant="contained" sx={{borderRadius:40,justifySelf:'center'}}>+</Button>
-      </Box>
-      {/* <Card sx={{ maxWidth: 700,height:50,mt:2 }}>
-        <CardActionArea>
-          <CardContent>
-            <Typography gutterBottom variant="h6" component="div" sx={{textAlign:'center'}  }>
-              Node Js
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card> */}
-    </Box>
+      </Box>    </Box>
     </>
   );
 }

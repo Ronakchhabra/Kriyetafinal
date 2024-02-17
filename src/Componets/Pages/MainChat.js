@@ -12,7 +12,7 @@ const socket = io.connect("http://localhost:3002");
 const drawerWidth = 240;
 
 function MainChat(props) {
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false);
@@ -20,14 +20,14 @@ const navigate = useNavigate();
   const [data, setData] = useState([]);
 
   const getData = () => {
-    try{
-        axios.get("http://localhost:3001/groupchats")
+    try {
+      axios.get("https://hackathondb.cyclic.app/groupchats")
         .then((response) => {
           setData(response?.data);
           console.log(response?.data);
         });
-    }catch(err){
-        console.log(err);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -54,137 +54,147 @@ const navigate = useNavigate();
   // const commName = "";
 
   const handleCreateCommunity = (e) => {
-    try{
-    axios
-      .post("http://localhost:3001/creategroup", {
-        groupName: groupName,
-        members: [userName],
-      })
-      .then(function (response) {
-        console.log(response);
-        console.log(groupName);
-        getData(); // Fetch updated data after creating the community
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    try {
+      axios
+        .post("https://hackathondb.cyclic.app/creategroup", {
+          groupName: groupName,
+          members: [userName],
+        })
+        .then(function (response) {
+          console.log(response);
+          console.log(groupName);
+          getData(); // Fetch updated data after creating the community
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
-      catch(err){
-        console.log(err)
-      }
+    catch (err) {
+      console.log(err)
+    }
   };
 
   return (
-    <>      
-    <Box sx={{ display: "flex" }}>
-    <CssBaseline />
-    <AppBar
-      position="fixed"
-      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-    >
-      <Navbar />
-    </AppBar>
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: {
-          width: drawerWidth,
-          boxSizing: "border-box",
-        },
-      }}
-    >
-      <Toolbar/>
-      <Box sx={{ overflow: "auto" }}>
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton onClick={()=>navigate('/courses')}>
-              <ListItemIcon>
-                <AccountBalance />
-              </ListItemIcon>
-              <ListItemText primary={"Courses"} />
-            </ListItemButton>
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton onClick={()=>navigate('/community')}>
-              <ListItemIcon >
-                <AccountBalance />
-              </ListItemIcon>
-              <ListItemText primary={"Community Support"} />
-            </ListItemButton>
-          </ListItem>
-        </List>
+    <>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <Navbar />
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+        >
+          <Toolbar />
+          <Box sx={{ overflow: "auto" }}>
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => navigate('/courses')}>
+                  <ListItemIcon>
+                    <AccountBalance />
+                  </ListItemIcon>
+                  <ListItemText primary={"Courses"} />
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => navigate('/mycourse/docsadmin')}>
+                  <ListItemIcon>
+                    <AccountBalance />
+                  </ListItemIcon>
+                  <ListItemText primary={"MyCourse"} />
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider />
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => navigate('/community')}>
+                  <ListItemIcon >
+                    <AccountBalance />
+                  </ListItemIcon>
+                  <ListItemText primary={"Community Support"} />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </Box>
+        </Drawer>
       </Box>
-    </Drawer>
-    </Box>
-    <Box component="main" sx={{ flexGrow:1,p:3 }}>
-      <div className="flex flex-row h-dvh" >
-        <div className="w-1/3  border overflow-y-auto">
-          <div className="text-xl font-bold mb-4">Community</div>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <div className="flex flex-row h-dvh" >
+          <div className="w-1/3  border overflow-y-auto">
+            <div className="text-xl font-bold mb-4">Community</div>
 
-          <div className="flex flex-col h-[1000px]">
-            <div className="overflow-y-auto max-h-96">
-              {data?.map((item) => (
-                <div
-                  className="flex justify-between items-center mb-2 p-4 bg-gray-200 rounded-md"
-                  key={item._id}
-                >
-                  <h3 className="text-lg font-bold">{item.groupName}</h3>
-                  <button
-                    className="px-4 py-2 text-white bg-blue-500 rounded-md"
-                    onClick={() => handleJoinRoom(item.groupId, item.groupName)}
+            <div className="flex flex-col h-[1000px]">
+              <div className="overflow-y-auto max-h-96">
+                {data?.map((item) => (
+                  <div
+                    className="flex justify-between items-center mb-2 p-4 bg-gray-200 rounded-md"
+                    key={item._id}
                   >
-                    Join room
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            <label className="text-xl font-bold mt-4" id="ronak">
-              Enter Community Name
-            </label>
-            <input
-              type="text"
-              placeholder="Enter Community Name"
-              onChange={(event) => {
-                setGroupName(event.target.value);
-              }}
-              name="ronak"
-              className="w-full px-2 py-2 mt-1  border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-            />
-
-            <br />
-            <button
-              className="bg-black text-white py-1 px-1 rounded-md"
-              onClick={handleCreateCommunity}
-            >
-              Create new community
-            </button>
-          </div>
-        </div>
-
-        <div className="w-2/3 h-full border">
-          <h3> Chat</h3>
-          <div className="App">
-            {!showChat ? (
-              <div className="joinChatContainer">
-                <h3>No Current Chat</h3>
+                    <h3 className="text-lg font-bold">{item.groupName}</h3>
+                    <button
+                      className="px-4 py-2 text-white bg-blue-500 rounded-md"
+                      onClick={() => handleJoinRoom(item.groupId, item.groupName)}
+                    >
+                      Join room
+                    </button>
+                  </div>
+                ))}
               </div>
-            ) : (
-              <Chats
-                socket={socket}
-                username={username}
-                room={room}
-                groupName={groupName}
+
+              <label className="text-xl font-bold mt-4" id="ronak">
+                Enter Community Name
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Community Name"
+                onChange={(event) => {
+                  setGroupName(event.target.value);
+                }}
+                name="ronak"
+                className="w-full px-2 py-2 mt-1  border rounded-md focus:outline-none focus:ring focus:border-blue-500"
               />
-            )}
+
+              <br />
+              <button
+                className="bg-black text-white py-1 px-1 rounded-md"
+                onClick={handleCreateCommunity}
+              >
+                Create new community
+              </button>
+            </div>
+          </div>
+
+          <div className="w-2/3 h-full border">
+            <h3> Chat</h3>
+            <div className="App">
+              {!showChat ? (
+                <div className="joinChatContainer">
+                  <h3>No Current Chat</h3>
+                </div>
+              ) : (
+                <Chats
+                  socket={socket}
+                  username={username}
+                  room={room}
+                  groupName={groupName}
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
       </Box>
     </>
   );

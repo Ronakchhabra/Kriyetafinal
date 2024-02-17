@@ -9,14 +9,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function AddCourse() {
   const [loading,setloading]  = useState(false);
+  let userID = localStorage.getItem('userID')
   const [User, SetUser] = useState({
     title: "",
     description: "",
     lvlOfDiff: "",
     imageLink: "",
-    videoLink: "",
-    published: true,
-    userID: "852531531",
+    userID,
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,10 +24,6 @@ function AddCourse() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     SetUser({ ...User, imageLink: file });
-  };
-  const handleFileChangeVideo = (e) => {
-    const file = e.target.files[0];
-    SetUser({ ...User, videoLink: file });
   };
   const navigate = useNavigate();
 
@@ -43,11 +38,7 @@ function AddCourse() {
     if (User.imageLink instanceof File) {
       formData.append("imageLink", User.imageLink);
     }
-    if (User.videoLink instanceof File) {
-      formData.append("videoLink", User.videoLink);
-    }
-    formData.append("published", User.published);
-    formData.append("published", User.userID);
+    formData.append("userID", User.userID);
     try{
     let res = await axios.post("https://hackathondb.cyclic.app/auth/addcourse", formData)
       if(res){
@@ -63,7 +54,7 @@ function AddCourse() {
             imageLink: "",
             videoLink: "",
             published: true,
-            userID: "852531531",
+            userID,
           });
         }
         navigate("/courses");
@@ -78,12 +69,13 @@ function AddCourse() {
       <Navbar />
       {loading ? <div className="spinner"></div>:
       <form
-        className="form-horizontal"
+        className="form-horizontal container justify-center border-spacing-2 border"
         style={{ marginTop: 100, marginLeft: 20 }}
         encType="multipart/form-data"
       >
-        <div className="form-group">
-          <label className="control-label col-sm-2" htmlFor="title">
+        
+        <div className="form-group ">
+          <label className="control-label col-sm-2 " htmlFor="title">
             Course Title:
           </label>
           <br />
@@ -156,21 +148,6 @@ function AddCourse() {
               className="form-control"
               id="imageLink"
               onChange={handleFileChange}
-            />
-          </div>
-        </div>
-        <br />
-
-        <div className="form-group">
-          <label className="control-label col-sm-2">Course Video:</label>
-          <div className="col-sm-10">
-            <TextField
-              sx={{ width: "40%" }}
-              type="file"
-              name="videoLink"
-              accept="video/*"
-              onChange={(e) => handleFileChangeVideo(e)}
-              className="form-control"
             />
           </div>
         </div>

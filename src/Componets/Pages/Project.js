@@ -6,7 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import { red } from "@mui/material/colors";
 import Sidebar from "../Sidebar/Sidebar";
 import { AddBox } from "@mui/icons-material";
-import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+import { Box, Button, Modal, TextField, Typography, selectClasses } from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -22,16 +22,18 @@ const style = {
   p: 4,
 };
 
-export default function Project() {
+export default function Project({selectedCourse}) {
   const [open, setOpen] = React.useState(false);
   const [isloading, setisloading] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  let UserID = localStorage.getItem('userID');
   const [Form, setForm] = React.useState({
-    VideoLink: "",
-    VideoTitle: "",
-    VideoDesc: "",
-    CourseID: "1",
+    UserID,
+    ProjectTitle: "",
+    ProjectDesc: "",
+    GitRepoLink: "",
+    CourseID: selectedCourse._id,
   });
   const HandleChange = (e) => {
     const { name, value } = e.target;
@@ -39,16 +41,16 @@ export default function Project() {
   };
   const handleClick = async () => {
     setisloading(true);
+    console.log(Form);
     const formData = new FormData();
-    formData.append("VideoTitle", Form.VideoTitle);
-    formData.append("VideoDesc", Form.VideoDesc);
-    if (Form.VideoLink instanceof File) {
-      formData.append("VideoLink", Form.VideoLink);
-      formData.append("VideoLink", Form.CourseID);
-    }
+    formData.append("UserID", Form.UserID);
+    formData.append("ProjectTitle", Form.ProjectTitle);
+    formData.append("ProjectDesc", Form.ProjectDesc);
+    formData.append("GitRepoLink", Form.GitRepoLink);
+    formData.append("CourseID", Form.CourseID);
     try {
       let res = await axios.post(
-        "http://localhost:3001/auth/addVideo",
+        "https://hackathondb.cyclic.app/auth/addProject",
         formData
       );
       if (res) {
@@ -58,9 +60,10 @@ export default function Project() {
         console.log(res.data);
         if (res.data.success) {
           setForm({
-            VideoLink: "",
-            VideoTitle: "",
-            VideoDesc: "",
+            UserID:"",
+            GitRepoLink: "",
+            ProjectTitle: "",
+            ProjectDesc: "",
             CourseID: "",
           });
         }
@@ -107,21 +110,25 @@ export default function Project() {
             variant="standard"
             sx={{ width: "100%", mt: 2 }}
             label={"Project Title"}
-
+            name="ProjectTitle"
+            onChange={HandleChange}
           />
           <TextField
             variant="standard"
             sx={{ width: "100%", mt: 2 }}
             label={"Project Desc"}
+            name="ProjectDesc"
+            onChange={HandleChange}
           />
           <TextField
             variant="standard"
             sx={{ width: "100%", mt: 2 }}
             label={"Git Repo Link"}
+            name="GitRepoLink"
+            onChange={HandleChange}
           />
-          <Button variant="contained" sx={{ width: "100%", mt: 2 }}>
-            {" "}
-            Upload{" "}
+          <Button variant="contained" sx={{ width: "100%", mt: 2 }} onClick={handleClick}>
+            Upload
           </Button>
         </Box>
       </Modal>

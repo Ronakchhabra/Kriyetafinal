@@ -18,7 +18,7 @@ const Auth = () => {
     <>
     <div className='Login-main'>
       <div className="Login-website-name">
-          <h1>Edu Hub...</h1>
+          <h1>SKILLIX </h1>
       </div>
       <div className='Login-app-container' { ...isLoginMode ? 'login-mode' : 'signup-mode'}>
         <div className='Login-card'>
@@ -38,9 +38,10 @@ const Auth = () => {
                 {isLoginMode
                   ? "Don't have an account? "
                   : 'Already have an account? '}
-                <button type="button" className='Login-btn' onClick={handleToggle}>
-                  {isLoginMode ? 'Sign up' : 'Login'}
-                </button>
+                <button type="button" className='Login-btn text-white bg-purple-700 dark:bg-gray-900' onClick={handleToggle}>
+  {isLoginMode ? 'Sign up' : 'Login'}
+</button>
+
               </h4>
             </div>
           </div>

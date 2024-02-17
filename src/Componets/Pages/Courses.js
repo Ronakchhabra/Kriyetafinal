@@ -17,25 +17,25 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea } from "@mui/material";
+import { Button, CardActionArea, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import NotFound from "./NotFound";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const drawerWidth = 240;
 
-export default function Courses({setselectedCourse}) {
+export default function Courses({ setselectedCourse }) {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [isloading, setisloading] = useState(true);
   React.useEffect(() => {
-    const getData = async() => {
-      try{
+    const getData = async () => {
+      try {
         let res = await axios
-          .get("http://localhost:3001/auth/getAllCourse")
-          if(res.data) {setCourses(res.data.data);setisloading(false);}
+          .get("https://hackathondb.cyclic.app/auth/getAllCourse")
+        if (res.data) { setCourses(res.data.data); setisloading(false); }
       }
-      catch(err){
+      catch (err) {
         setisloading(false);
       }
     }
@@ -66,7 +66,7 @@ export default function Courses({setselectedCourse}) {
           <Box sx={{ overflow: "auto" }}>
             <List>
               <ListItem disablePadding>
-                <ListItemButton onClick={()=>navigate('/courses')}>
+                <ListItemButton onClick={() => navigate('/courses')}>
                   <ListItemIcon>
                     <AccountBalance />
                   </ListItemIcon>
@@ -74,10 +74,20 @@ export default function Courses({setselectedCourse}) {
                 </ListItemButton>
               </ListItem>
             </List>
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => navigate('/mycourse/docsadmin')}>
+                  <ListItemIcon>
+                    <AccountBalance />
+                  </ListItemIcon>
+                  <ListItemText primary={"MyCourse"} />
+                </ListItemButton>
+              </ListItem>
+            </List>
             <Divider />
             <List>
               <ListItem disablePadding>
-                <ListItemButton onClick={()=>navigate('/community')}>
+                <ListItemButton onClick={() => navigate('/community')}>
                   <ListItemIcon >
                     <AccountBalance />
                   </ListItemIcon>
@@ -87,44 +97,50 @@ export default function Courses({setselectedCourse}) {
             </List>
           </Box>
         </Drawer>
-        <Box sx={{flexDirection:'column',width:'100%',flexGrow: 1, p: 3, ml: 0, mt: 10 ,}}>
-        <Box sx={{display:'flex',justifyContent:'end',alignItems:'end'}}>
-            <Button startIcon={<AddBox/>} onClick={()=>navigate("/AddCourse")} variant='contained' >Add Course</Button>
-        </Box>
-        <Box component="main" sx={{ flexGrow: 1, p: 3,display:"flex"}}>
-          <Toolbar />
-          {
-            isloading ? <div className="spinner"/>:
-            courses?.length>0 ? 
-            courses?.map((c)=>{
-              return(
-          <Card
-            sx={{ maxWidth: 345}}
-            key={c._id}
-            onClick={() => {setselectedCourse(c);navigate("/CourseDetalis")}}
-          >
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                height="140"
-                image={c.imageLink} 
-                alt={c._id}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {c.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {c.description}
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-            )})
-            :            
-              <NotFound/>
-          }
-        </Box>
+        <Box sx={{ flexDirection: 'column', width: '100%', flexGrow: 1, p: 3, ml: 0, mt: 10, }}>
+          <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
+            <Button startIcon={<AddBox />} onClick={() => navigate("/AddCourse")} variant='contained' >Add Course</Button>
+          </Box>
+          <Box component="main" sx={{ flexGrow: 1, p: 3, display: "flex" }}>
+            <Toolbar />
+                      <Grid container spacing={0}>
+            {
+              isloading ? <div className="spinner" /> :
+                courses?.length > 0 ?
+                  courses?.map((c) => {
+                    return (                      
+                      <Grid item xs={4} md={4} display={'flex'} sx={{flexDirection:'row'}} key={c._id} mt={5}>
+                          <Card
+                            sx={{ maxWidth: 345 }}
+                            key={c._id}
+                            onClick={() => { setselectedCourse(c); navigate("/CourseDetalis/"+c._id) }}
+                          >
+                            <CardActionArea>
+                              <CardMedia
+                                component="img"
+                                sx={{height:'200px'}}
+                                height="140"
+                                image={c.imageLink}
+                                alt={c._id}
+                              />
+                              <CardContent>
+                                <Typography gutterBottom variant="h5" component="div">
+                                  {c.title}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                  {c.description}
+                                </Typography>
+                              </CardContent>
+                            </CardActionArea>
+                          </Card>
+                </Grid>
+                    )
+                  })
+                  :
+                  <NotFound />
+                }
+              </Grid>
+          </Box>
         </Box>
       </Box>
     </>

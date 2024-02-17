@@ -4,6 +4,12 @@ import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import AddBox from "@mui/icons-material/AddBox";
 import Sidebar from "../Sidebar/Sidebar";
 import axios from "axios";
+import NotFound from "./NotFound";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import { CardActionArea, Grid, InputLabel, MenuItem, Select } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -17,18 +23,36 @@ const style = {
   p: 4,
 };
 
-const Video = () => {
+const Video = ({selectedCourse}) => {
+  const navigate = useNavigate();
   const videoTitle = "Introduction to Programming";
   const videoUrl = "https://www.youtube.com/embed/your_video_id";
   const [open, setOpen] = React.useState(false);
   const [isloading, setisloading] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  let UserID = localStorage.getItem('userID')
+  const [courses,setCourses] = useState([]);
+  React.useEffect(() => {
+    const getData = async () => {
+      try {
+        let res = await axios
+          .get("https://hackathondb.cyclic.app/auth/getVideo/"+UserID);
+        if (res.data) { setCourses(res.data.data); setisloading(false); }
+      }
+      catch (err) {
+        setisloading(false);
+      }
+    }
+    getData();
+  }, []);
+
   const [Form, setForm] = useState({
+    UserID,
     VideoLink: "",
     VideoTitle: "",
     VideoDesc: "",
-    CourseID: "1",
+    CourseID: selectedCourse._id,
   });
   const HandleChange = (e) => {
     const { name, value } = e.target;
@@ -41,15 +65,16 @@ const Video = () => {
   const handleClick = async () => {
     setisloading(true);
     const formData = new FormData();
+    formData.append("UserID", Form.UserID);
     formData.append("VideoTitle", Form.VideoTitle);
     formData.append("VideoDesc", Form.VideoDesc);
     if (Form.VideoLink instanceof File) {
       formData.append("VideoLink", Form.VideoLink);
-      formData.append("VideoLink", Form.CourseID);
     }
+    formData.append("CourseID", Form.CourseID);
     try {
       let res = await axios.post(
-        "http://localhost:3001/auth/addVideo",
+        "https://hackathondb.cyclic.app/auth/addVideo",
         formData
       );
       if (res) {
@@ -59,6 +84,7 @@ const Video = () => {
         console.log(res.data);
         if (res.data.success) {
           setForm({
+            UserID,
             VideoLink: "",
             VideoTitle: "",
             VideoDesc: "",
@@ -147,8 +173,7 @@ const Video = () => {
             </Box>
           )}
         </Modal>
-
-        <Box sx={{ display: "flex", mt: 2, width: "100%" }}>
+        <Box sx={{ display: "flex", mt: 2, mr:2,width: "100%" }}>
           <VideoCard videoTitle={videoTitle} videoUrl={videoUrl} />
           <VideoCard videoTitle={videoTitle} videoUrl={videoUrl} />
           <VideoCard videoTitle={videoTitle} videoUrl={videoUrl} />
