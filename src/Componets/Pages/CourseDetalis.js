@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import { Box, Button, CardActionArea, Toolbar } from "@mui/material";
 import Sidebar from '../Sidebar/Sidebar';
 import axios from "axios";
-import { useParams } from "react-router-dom";
 export default function CourseDetalis() {
   const [topics, setTopic] = useState([]);
   return (

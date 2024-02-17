@@ -37,17 +37,17 @@ import "react-toastify/dist/ReactToastify.css";
 
 const drawerWidth = 240;
 
-export default function DocsAdmin() {
+export default function VideoAdmin() {
     let i = 0;
     const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
     const [isloading, setisloading] = useState(true);
-    const id = localStorage.getItem("userID");
+    const UserID = localStorage.getItem("userID");
 
     const getData = async () => {
         try {
             let res = await axios
-                .get("https://hackathondb.cyclic.app/auth/getDocs/" + id);
+                .get("https://hackathondb.cyclic.app/auth/getVideo/" + UserID);
             if (res.data) { setCourses(res.data.data); setisloading(false); }
             console.log(res.data)
         }
@@ -62,7 +62,7 @@ export default function DocsAdmin() {
     const handlerequest = async (id, Statusmsg) => {
         let data = { id, Statusmsg };
         try {
-            let res = await axios.post('https://hackathondb.cyclic.app/UpdateStatus', data);
+            let res = await axios.post('https://hackathondb.cyclic.app/UpdateStatus/Video', data);
             if (res) { alert("Update Successfully"); getData(); };
         } catch (err) {
             console.log(err)
@@ -141,7 +141,7 @@ export default function DocsAdmin() {
                     variant="h4"
                     sx={{ fontSize: "20px", color: "#6945FF", textAlign: "center" }}
                 >
-                    Documentation Monitoring
+                    Video Monitoring
                 </Typography>
                 <TableContainer component={Paper} sx={{ marginTop: "20px" }}>
                     <Table sx={{ minWidth: 650 }} aria-label="caption table">
@@ -159,7 +159,7 @@ export default function DocsAdmin() {
                                         textAlign: "center",
                                     }}
                                 >
-                                    Documentation Monitoring
+                                    Videos Monitoring
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -243,7 +243,7 @@ export default function DocsAdmin() {
                                         letterSpacing: "0em",
                                     }}
                                 >
-                                    Documentation SubTitle
+                                    Video Title
                                 </TableCell>
                                 <TableCell
                                     align="center"
@@ -255,7 +255,7 @@ export default function DocsAdmin() {
                                         letterSpacing: "0em",
                                     }}
                                 >
-                                    Documentation SubTitle
+                                    Notes Desc
                                 </TableCell>
                                 <TableCell
                                     align="center"
@@ -267,7 +267,7 @@ export default function DocsAdmin() {
                                         letterSpacing: "0em",
                                     }}
                                 >
-                                    Documentation Content ID
+                                    Notes Link
                                 </TableCell>
                                 <TableCell
                                     align="center"
@@ -316,13 +316,13 @@ export default function DocsAdmin() {
                                         <TableCell align="center">{i}</TableCell>
                                         {/* <TableCell align="center">{user._id}</TableCell> */}
                                         <TableCell align="center">
-                                            {user?.subTitle}
+                                            {user?.VideoTitle}
                                         </TableCell>
                                         <TableCell align="center">
-                                            {user?.subContent?.slice(0, 20)}
+                                            {user?.VideoDesc?.slice(0, 20)}
                                         </TableCell>
                                         <TableCell align="center">
-                                            {user?.ContentID}
+                                            {user?.VideoLink}
                                         </TableCell>
                                         <TableCell align="center">
                                             <Typography

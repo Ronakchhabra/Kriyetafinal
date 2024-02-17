@@ -15,6 +15,8 @@ import Quill from './Componets/Pages/Quill';
 import DocumentationContent from './Componets/Pages/DocumentationContent';
 import HomePage from './Componets/Pages/HomePage';
 import DocsAdmin from './Componets/MyCourses/DocsAdmin';
+import NotesAdmin from './Componets/MyCourses/NotesAdmin';
+import VideoAdmin from './Componets/MyCourses/VideoAdmin';
 function App() {
   const [selectedCourse,setselectedCourse] = useState([]);
   const [selectedDocs,setselectedDocs] = useState([]);
@@ -31,7 +33,7 @@ function App() {
               element={<Courses setselectedCourse={setselectedCourse}/>}
             />
             <Route
-              path="/coursedetalis/:id"
+              path="/coursedetalis"
               element={<Documentation selectedCourse={selectedCourse} setselectedDocs={setselectedDocs}/>}
             />                                   
             <Route
@@ -65,6 +67,14 @@ function App() {
             <Route
             path="/mycourse/docsadmin"
             element={<DocsAdmin/>}
+          />                        
+          <Route
+            path="/mycourse/videoadmin"
+            element={<VideoAdmin/>}
+          />                        
+          <Route
+            path="/mycourse/notesadmin"
+            element={<NotesAdmin/>}
           />            
             <Route
               path="/*"

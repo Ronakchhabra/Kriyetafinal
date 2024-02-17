@@ -50,31 +50,31 @@ const formats = [
   "background",
 ];
 
-export default function Quill({selectedCourse}) {
+export default function Quill() {
   const [isLoading, setisLoading] = useState(false);
   const [value, setValue] = useState("");
   const [Title, setTitle] = useState("");
   const quillRef = useRef(null);
   const navigate = useNavigate();
-  let UserID = localStorage.getItem('userID')
-  const handleClick = async() => {
+  let UserID = localStorage.getItem('CourseUserID')
+  let CourseID = localStorage.getItem('CourseID')
+  const handleClick = async () => {
     setisLoading(true)
     const html = quillRef.current.editor.root.innerHTML;
     const data = {
       UserID,
-      CourseID: selectedCourse._id,
+      CourseID,
       subTitle: Title,
       subContent: html,
       ContentID: Date.now(),
     };
-    try{
-     let res = await axios.post('https://hackathondb.cyclic.app/auth/addDoc',data);
-     if(res.data){
-       setisLoading(false)
-      console.log(res.data);
-      navigate('/coursedetalis/'+selectedCourse._id);
-    }
-    }catch(err){
+    try {
+      let res = await axios.post('https://hackathondb.cyclic.app/auth/addDoc', data);
+      if (res.data) {
+        setisLoading(false)
+        navigate('/coursedetalis');
+      }
+    } catch (err) {
       console.log(err);
     }
   };
@@ -82,33 +82,33 @@ export default function Quill({selectedCourse}) {
   return (
     <>
       <Navbar />
-      {isLoading ? <div className="spinner"/> :
-      <Box sx={{ mt: 10, ml: 5 }}>
-        <TextField
-          label="Title"
-          variant="outlined"
-          name="Title"
-          value={Title}
-          onChange={(e) => setTitle(e.target.value)}
-          sx={{ width: "90%", mb: 5 }}
-        ></TextField>
+      {isLoading ? <div className="spinner" /> :
+        <Box sx={{ mt: 10, ml: 5 }}>
+          <TextField
+            label="Title"
+            variant="outlined"
+            name="Title"
+            value={Title}
+            onChange={(e) => setTitle(e.target.value)}
+            sx={{ width: "90%", mb: 5 }}
+          ></TextField>
 
-        <ReactQuill
-          modules={modules}
-          formats={formats}
-          ref={quillRef}
-          theme={"snow"}
-          value={value}
-          onChange={setValue}
-          readOnly={false}
-          style={{ width: "90%", height: "50vh" }}
-        />
-        <Box sx={{ mt: 6 }}>
-          <Button variant="contained" onClick={handleClick}>
-            publish
-          </Button>
-        </Box>
-      </Box>}
+          <ReactQuill
+            modules={modules}
+            formats={formats}
+            ref={quillRef}
+            theme={"snow"}
+            value={value}
+            onChange={setValue}
+            readOnly={false}
+            style={{ width: "90%", height: "50vh" }}
+          />
+          <Box sx={{ mt: 6 }}>
+            <Button variant="contained" onClick={handleClick}>
+              publish
+            </Button>
+          </Box>
+        </Box>}
     </>
   );
 }

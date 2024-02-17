@@ -37,7 +37,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const drawerWidth = 240;
 
-export default function DocsAdmin() {
+export default function NotesAdmin() {
     let i = 0;
     const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
@@ -47,7 +47,7 @@ export default function DocsAdmin() {
     const getData = async () => {
         try {
             let res = await axios
-                .get("https://hackathondb.cyclic.app/auth/getDocs/" + id);
+                .get("https://hackathondb.cyclic.app/auth/getNote/" + id);
             if (res.data) { setCourses(res.data.data); setisloading(false); }
             console.log(res.data)
         }
@@ -62,7 +62,7 @@ export default function DocsAdmin() {
     const handlerequest = async (id, Statusmsg) => {
         let data = { id, Statusmsg };
         try {
-            let res = await axios.post('https://hackathondb.cyclic.app/UpdateStatus', data);
+            let res = await axios.post('https://hackathondb.cyclic.app/UpdateStatus/note', data);
             if (res) { alert("Update Successfully"); getData(); };
         } catch (err) {
             console.log(err)
@@ -141,7 +141,7 @@ export default function DocsAdmin() {
                     variant="h4"
                     sx={{ fontSize: "20px", color: "#6945FF", textAlign: "center" }}
                 >
-                    Documentation Monitoring
+                    Notes Monitoring
                 </Typography>
                 <TableContainer component={Paper} sx={{ marginTop: "20px" }}>
                     <Table sx={{ minWidth: 650 }} aria-label="caption table">
@@ -159,7 +159,7 @@ export default function DocsAdmin() {
                                         textAlign: "center",
                                     }}
                                 >
-                                    Documentation Monitoring
+                                    Notes Monitoring
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -243,7 +243,7 @@ export default function DocsAdmin() {
                                         letterSpacing: "0em",
                                     }}
                                 >
-                                    Documentation SubTitle
+                                    Notes Title
                                 </TableCell>
                                 <TableCell
                                     align="center"
@@ -255,7 +255,7 @@ export default function DocsAdmin() {
                                         letterSpacing: "0em",
                                     }}
                                 >
-                                    Documentation SubTitle
+                                    Notes Desc
                                 </TableCell>
                                 <TableCell
                                     align="center"
@@ -267,7 +267,7 @@ export default function DocsAdmin() {
                                         letterSpacing: "0em",
                                     }}
                                 >
-                                    Documentation Content ID
+                                    Notes Link
                                 </TableCell>
                                 <TableCell
                                     align="center"
@@ -316,13 +316,13 @@ export default function DocsAdmin() {
                                         <TableCell align="center">{i}</TableCell>
                                         {/* <TableCell align="center">{user._id}</TableCell> */}
                                         <TableCell align="center">
-                                            {user?.subTitle}
+                                            {user?.NotesTitle}
                                         </TableCell>
                                         <TableCell align="center">
-                                            {user?.subContent?.slice(0, 20)}
+                                            {user?.NotesDesc?.slice(0, 20)}
                                         </TableCell>
                                         <TableCell align="center">
-                                            {user?.ContentID}
+                                            {user?.NotesLink}
                                         </TableCell>
                                         <TableCell align="center">
                                             <Typography

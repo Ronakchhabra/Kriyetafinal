@@ -9,18 +9,18 @@ import {
 } from "@mui/material";
 import AddBox from "@mui/icons-material/AddBox";
 import Sidebar from "../Sidebar/Sidebar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate,  } from "react-router-dom";
 import axios from "axios";
 
-function Documentation({ setselectedDocs }) {
+function Documentation({setselectedDocs}) {
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
   const [isloading, setisloading] = useState(true);
-  const { id } = useParams();
+  const CourseID = localStorage.getItem('CourseID');
   const getData = async () => {
     try {
       let res = await axios
-        .get("https://hackathondb.cyclic.app/auth/getDoc/" + id)
+        .get("https://hackathondb.cyclic.app/auth/getDoc/" + CourseID);
       if (res.data) { setCourses(res.data); console.log(res.data); setisloading(false); }
       if (res.data === "") {
         setisloading(false);
@@ -74,7 +74,7 @@ function Documentation({ setselectedDocs }) {
                   <div key={item._id}>
                     <Card sx={{ maxWidth: "full", height: 50, mt: 2 }}>
                       <CardActionArea>
-                        <CardContent onClick={() => { setselectedDocs(item); navigate('/DocumentationContent') }}>
+                        <CardContent onClick={() => {navigate('/DocumentationContent');setselectedDocs(item) }}>
                           <Typography
                             gutterBottom
                             variant="h6"

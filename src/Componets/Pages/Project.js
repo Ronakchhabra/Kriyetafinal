@@ -22,18 +22,36 @@ const style = {
   p: 4,
 };
 
-export default function Project({selectedCourse}) {
+export default function Project() {
   const [open, setOpen] = React.useState(false);
   const [isloading, setisloading] = React.useState(false);
+  const [courses, setCourses] = React.useState([]);
+  let UserID = localStorage.getItem('CourseUserID');
+  const CourseID = localStorage.getItem("CourseID");
+
+    const getData = async () => {
+        try {
+            let res = await axios
+                .get("https://hackathondb.cyclic.app/auth/getProjects/" + CourseID);
+            if (res.data) { setCourses(res.data.data);console.log(res.data); setisloading(false); }
+        }
+        catch (err) {
+            setisloading(false);
+        }
+    }
+
+    React.useEffect(() => {
+        getData();
+    }, []);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  let UserID = localStorage.getItem('userID');
   const [Form, setForm] = React.useState({
-    UserID,
+    UserID:UserID,
     ProjectTitle: "",
     ProjectDesc: "",
     GitRepoLink: "",
-    CourseID: selectedCourse._id,
+    CourseID:CourseID,
   });
   const HandleChange = (e) => {
     const { name, value } = e.target;
@@ -42,29 +60,19 @@ export default function Project({selectedCourse}) {
   const handleClick = async () => {
     setisloading(true);
     console.log(Form);
-    const formData = new FormData();
-    formData.append("UserID", Form.UserID);
-    formData.append("ProjectTitle", Form.ProjectTitle);
-    formData.append("ProjectDesc", Form.ProjectDesc);
-    formData.append("GitRepoLink", Form.GitRepoLink);
-    formData.append("CourseID", Form.CourseID);
     try {
-      let res = await axios.post(
-        "https://hackathondb.cyclic.app/auth/addProject",
-        formData
-      );
+      let res = await axios.post("https://hackathondb.cyclic.app/auth/addProject",Form);
       if (res) {
-        // toast.success(res.data.message);
         setisloading(false);
         handleClose();
         console.log(res.data);
         if (res.data.success) {
           setForm({
-            UserID:"",
+            UserID,
             GitRepoLink: "",
             ProjectTitle: "",
             ProjectDesc: "",
-            CourseID: "",
+            CourseID,
           });
         }
         // navigate("/courses");
@@ -132,25 +140,28 @@ export default function Project({selectedCourse}) {
           </Button>
         </Box>
       </Modal>
-      <Card sx={{ maxWidth: 345, marginLeft: 50, marginTop: 4 }}>
+
+      <Box sx={ {marginLeft: 200, marginTop: 4} } component={'main'} >
+        <Card  sx={{maxWidth: 345}}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
               R
             </Avatar>
           }
-          title="Shrimp and Chorizo Paella"
+          // title={item.ProjectTitle}
           subheader="September 14, 2016"
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            This impressive paella is a perfect party dish and a fun meal to
-            cook together with your guests. Add 1 cup of frozen peas along with
-            the mussels, if you like.
+            {/* {item.ProjectDesc} */}
+          {"jabfhaf"}
           </Typography>
-          <Link to="/">https://kfnjdfndf.com/ajsfa/</Link>
+          {/* <Link to={item.GitRepoLink}>{item.GitRepoLink}</Link> */}
+          {"a,jfn"}
         </CardContent>
       </Card>
+            </Box>
     </>
   );
 }

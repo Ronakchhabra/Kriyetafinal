@@ -1,15 +1,12 @@
 import React, { useState } from "react";
-import VideoCard from "./VideoCard"; // Import the VideoCard component
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import AddBox from "@mui/icons-material/AddBox";
 import Sidebar from "../Sidebar/Sidebar";
 import axios from "axios";
-import NotFound from "./NotFound";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea, Grid, InputLabel, MenuItem, Select } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { CardActionArea, Grid} from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -23,22 +20,21 @@ const style = {
   p: 4,
 };
 
-const Video = ({selectedCourse}) => {
-  const navigate = useNavigate();
-  const videoTitle = "Introduction to Programming";
-  const videoUrl = "https://www.youtube.com/embed/your_video_id";
+const Video = () => {
   const [open, setOpen] = React.useState(false);
   const [isloading, setisloading] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  let UserID = localStorage.getItem('userID')
-  const [courses,setCourses] = useState([]);
+  let UserID = localStorage.getItem('CourseUserID');
+  let CourseID = localStorage.getItem('CourseID')
+  const [courses, setCourses] = useState([]);
+ 
   React.useEffect(() => {
     const getData = async () => {
       try {
         let res = await axios
-          .get("https://hackathondb.cyclic.app/auth/getVideo/"+UserID);
-        if (res.data) { setCourses(res.data.data); setisloading(false); }
+          .get("https://hackathondb.cyclic.app/auth/getVideos/" + CourseID);
+        if (res.data) { setCourses(res.data.data); console.log(res.data); setisloading(false); }
       }
       catch (err) {
         setisloading(false);
@@ -52,7 +48,7 @@ const Video = ({selectedCourse}) => {
     VideoLink: "",
     VideoTitle: "",
     VideoDesc: "",
-    CourseID: selectedCourse._id,
+    CourseID,
   });
   const HandleChange = (e) => {
     const { name, value } = e.target;
@@ -88,7 +84,7 @@ const Video = ({selectedCourse}) => {
             VideoLink: "",
             VideoTitle: "",
             VideoDesc: "",
-            CourseID: "",
+            CourseID,
           });
         }
         // navigate("/courses");
@@ -173,11 +169,45 @@ const Video = ({selectedCourse}) => {
             </Box>
           )}
         </Modal>
-        <Box sx={{ display: "flex", mt: 2, mr:2,width: "100%" }}>
+        <Grid container spacing={0}>
+          {
+            isloading ? <div className="spinner" />
+              :
+              courses?.map((c) => {
+                return (
+                  <Grid item xs={4} md={4} display={'flex'} sx={{ flexDirection: 'row' }} key={c._id} mt={5}>
+                    <Card
+                      sx={{ maxWidth: 345 }}
+                    >
+                      <CardActionArea>
+                        <CardMedia
+                          component="video"
+                          image={c.VideoLink}
+                          alt={c._id}
+                        />
+
+                        <CardContent>
+                          <Typography gutterBottom variant="h5" component="div">
+                            {c.VideoTitle}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {c.VideoDesc}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                )
+              })
+            // :
+            // <NotFound />
+          }
+        </Grid>
+        {/* <Box sx={{ display: "flex", mt: 2, mr:2,width: "100%" }}>
           <VideoCard videoTitle={videoTitle} videoUrl={videoUrl} />
           <VideoCard videoTitle={videoTitle} videoUrl={videoUrl} />
           <VideoCard videoTitle={videoTitle} videoUrl={videoUrl} />
-        </Box>
+        </Box> */}
       </Box>
     </>
   );

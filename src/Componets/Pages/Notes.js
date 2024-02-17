@@ -1,26 +1,13 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import { red } from "@mui/material/colors";
 import Sidebar from "../Sidebar/Sidebar";
-import { AddBox, CloudUpload } from "@mui/icons-material";
+import { AddBox} from "@mui/icons-material";
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import axios from "axios";
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
 
 const style = {
   position: "absolute",
@@ -39,15 +26,33 @@ export default function Notes({ selectedCourse }) {
   const [isloading, setisloading] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  let UserID = localStorage.getItem('userID')
+  let UserID = localStorage.getItem('CourseUserID');
+  let CourseID = localStorage.getItem('CourseID');
+  const [courses, setCourses] = React.useState([]);
+
+  const getData = async () => {
+        try {
+            let res = await axios
+                .get("https://hackathondb.cyclic.app/auth/getNotes/" + CourseID);
+            if (res.data) { setCourses(res.data.data); setisloading(false); }
+            console.log(res.data)
+        }
+        catch (err) {
+            setisloading(false);
+        }
+    }
+
+    React.useEffect(() => {
+        getData();
+    }, []);
+
   const [Form, setForm] = React.useState({
     UserID,
     NotesLink: "",
     NotesTitle: "",
     NotesDesc: "",
-    CourseID: selectedCourse._id,
+    CourseID,
   });
-  console.log(selectedCourse);
   const HandleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...Form, [name]: value });
@@ -83,10 +88,9 @@ export default function Notes({ selectedCourse }) {
             NotesLink: "",
             NotesTitle: "",
             NotesDesc: "",
-            CourseID: "",
+            CourseID,
           });
         }
-        // navigate("/courses");
       }
     } catch (err) {
       handleClose();
