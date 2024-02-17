@@ -12,10 +12,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Navbar from "../Navbar/Navbar";
 import { AccountBalance } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
 export default function Sidebar() {
+  const navigate = useNavigate();
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -40,7 +42,7 @@ export default function Sidebar() {
         <Box sx={{ overflow: "auto" }}>
           <List>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={()=>navigate('/coursedetalis')}>
                 <ListItemIcon>
                   <AccountBalance />
                 </ListItemIcon>
@@ -50,7 +52,7 @@ export default function Sidebar() {
           </List>
           <List>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={()=>navigate('/coursevideo')}>
                 <ListItemIcon>
                   <AccountBalance />
                 </ListItemIcon>
@@ -60,17 +62,7 @@ export default function Sidebar() {
           </List>
           <List>
             <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <AccountBalance />
-                </ListItemIcon>
-                <ListItemText primary={"Group Study"} />
-              </ListItemButton>
-            </ListItem>
-          </List>
-          <List>
-            <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={()=>navigate('/project')}>
                 <ListItemIcon>
                   <AccountBalance />
                 </ListItemIcon>
@@ -80,7 +72,7 @@ export default function Sidebar() {
           </List>
           <List>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={()=>navigate('/notes')}>
                 <ListItemIcon>
                   <AccountBalance />
                 </ListItemIcon>

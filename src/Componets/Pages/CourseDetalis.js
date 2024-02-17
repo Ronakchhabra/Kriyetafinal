@@ -1,10 +1,13 @@
 import * as React from "react";
+import {useState} from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { Box, Button, CardActionArea, Toolbar } from "@mui/material";
 import Sidebar from '../Sidebar/Sidebar';
+import axios from "axios";
 export default function CourseDetalis() {
+  const [topics, setTopic] = useState([]);
   return (
     <>
         <Sidebar/>
@@ -22,7 +25,7 @@ export default function CourseDetalis() {
       <Box display={'flex'} sx={{justifyContent:'center',mr:50,mt:2}}>
       <Button  variant="contained" sx={{borderRadius:40,justifySelf:'center'}}>+</Button>
       </Box>
-      <Card sx={{ maxWidth: 700,height:50,mt:2 }}>
+      {/* <Card sx={{ maxWidth: 700,height:50,mt:2 }}>
         <CardActionArea>
           <CardContent>
             <Typography gutterBottom variant="h6" component="div" sx={{textAlign:'center'}  }>
@@ -30,7 +33,7 @@ export default function CourseDetalis() {
             </Typography>
           </CardContent>
         </CardActionArea>
-      </Card>
+      </Card> */}
     </Box>
     </>
   );
